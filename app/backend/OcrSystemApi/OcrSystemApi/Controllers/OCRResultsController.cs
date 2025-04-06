@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.DataAccess;
-using OcrSystem.Models;
+using OcrSystemApi.DataAccess;
+using OcrSystemApi.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace OcrSystem.Controllers
+namespace OcrSystemApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace OcrSystem.Controllers
             _context = context;
         }
 
-        [HttpGet("{invoiceId}")]
+        [HttpGet("{invoiceid}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<OCRResult>>> GetOCRResults(int invoiceId)
         {
@@ -45,7 +45,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpGet("Detail/{ocrId}")]
+        [HttpGet("detail/{ocrid}")]
         [Authorize]
         public async Task<ActionResult<OCRResult>> GetOCRResult(int ocrId)
         {
@@ -101,7 +101,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpPut("{ocrId}")]
+        [HttpPut("{ocrid}")]
         [Authorize]
         public async Task<IActionResult> UpdateOCRResult(int ocrId, OCRResult ocrResult)
         {
@@ -142,7 +142,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpDelete("{ocrId}")]
+        [HttpDelete("{ocrid}")]
         [Authorize]
         public async Task<IActionResult> DeleteOCRResult(int ocrId)
         {

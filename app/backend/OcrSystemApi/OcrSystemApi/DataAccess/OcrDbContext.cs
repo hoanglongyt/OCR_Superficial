@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.Models;
+using OcrSystemApi.Models;
 
-namespace OcrSystem.DataAccess
+namespace OcrSystemApi.DataAccess
 {
     public class OcrDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
@@ -19,7 +19,6 @@ namespace OcrSystem.DataAccess
         {
             base.OnModelCreating(modelBuilder); // Quan trọng: Gọi base để Identity cấu hình các bảng của nó
 
-            // Đổi tên các bảng của Identity để phù hợp với cấu trúc của bạn
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
             modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");

@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OcrSystem.DataAccess; 
-using OcrSystem.Models;
+using OcrSystemApi.DataAccess; 
+using OcrSystemApi.Models;
+using OcrSystemApi.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(); 
 
 // Configure DbContext
-builder.Services.AddDbContext<OcrDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<OcrDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
@@ -50,6 +50,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Add Swagger
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OcrSystem.DataAccess;
+using OcrSystemApi.DataAccess;
 
 #nullable disable
 
@@ -155,7 +155,7 @@ namespace LyHoangLong.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.Invoice", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.Invoice", b =>
                 {
                     b.Property<int>("InvoiceID")
                         .ValueGeneratedOnAdd()
@@ -189,7 +189,7 @@ namespace LyHoangLong.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.InvoiceImage", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.InvoiceImage", b =>
                 {
                     b.Property<int>("ImageID")
                         .ValueGeneratedOnAdd()
@@ -215,7 +215,7 @@ namespace LyHoangLong.Migrations
                     b.ToTable("InvoiceImages");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.InvoiceItem", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.InvoiceItem", b =>
                 {
                     b.Property<int>("ItemID")
                         .ValueGeneratedOnAdd()
@@ -247,7 +247,7 @@ namespace LyHoangLong.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.OCRResult", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.OCRResult", b =>
                 {
                     b.Property<int>("OCRID")
                         .ValueGeneratedOnAdd()
@@ -275,7 +275,7 @@ namespace LyHoangLong.Migrations
                     b.ToTable("OCRResults");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.User", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,9 +317,7 @@ namespace LyHoangLong.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -369,7 +367,7 @@ namespace LyHoangLong.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("OcrSystem.Models.User", null)
+                    b.HasOne("OcrSystemApi.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -378,7 +376,7 @@ namespace LyHoangLong.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("OcrSystem.Models.User", null)
+                    b.HasOne("OcrSystemApi.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -393,7 +391,7 @@ namespace LyHoangLong.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OcrSystem.Models.User", null)
+                    b.HasOne("OcrSystemApi.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -402,16 +400,16 @@ namespace LyHoangLong.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("OcrSystem.Models.User", null)
+                    b.HasOne("OcrSystemApi.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.Invoice", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.Invoice", b =>
                 {
-                    b.HasOne("OcrSystem.Models.User", "User")
+                    b.HasOne("OcrSystemApi.Models.User", "User")
                         .WithMany("Invoices")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -420,9 +418,9 @@ namespace LyHoangLong.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.InvoiceImage", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.InvoiceImage", b =>
                 {
-                    b.HasOne("OcrSystem.Models.Invoice", "Invoice")
+                    b.HasOne("OcrSystemApi.Models.Invoice", "Invoice")
                         .WithMany("InvoiceImages")
                         .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -431,9 +429,9 @@ namespace LyHoangLong.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.InvoiceItem", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.InvoiceItem", b =>
                 {
-                    b.HasOne("OcrSystem.Models.Invoice", "Invoice")
+                    b.HasOne("OcrSystemApi.Models.Invoice", "Invoice")
                         .WithMany("InvoiceItems")
                         .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -442,9 +440,9 @@ namespace LyHoangLong.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.OCRResult", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.OCRResult", b =>
                 {
-                    b.HasOne("OcrSystem.Models.Invoice", "Invoice")
+                    b.HasOne("OcrSystemApi.Models.Invoice", "Invoice")
                         .WithMany("OCRResults")
                         .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -453,7 +451,7 @@ namespace LyHoangLong.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.Invoice", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.Invoice", b =>
                 {
                     b.Navigation("InvoiceImages");
 
@@ -462,7 +460,7 @@ namespace LyHoangLong.Migrations
                     b.Navigation("OCRResults");
                 });
 
-            modelBuilder.Entity("OcrSystem.Models.User", b =>
+            modelBuilder.Entity("OcrSystemApi.Models.User", b =>
                 {
                     b.Navigation("Invoices");
                 });

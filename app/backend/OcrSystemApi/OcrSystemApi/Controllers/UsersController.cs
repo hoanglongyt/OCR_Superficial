@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.Models;
+using OcrSystemApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OcrSystem.Controllers
+namespace OcrSystemApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

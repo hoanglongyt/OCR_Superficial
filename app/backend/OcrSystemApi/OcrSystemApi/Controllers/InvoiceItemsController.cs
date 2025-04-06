@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.DataAccess;
-using OcrSystem.Models;
+using OcrSystemApi.DataAccess;
+using OcrSystemApi.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace OcrSystem.Controllers
+namespace OcrSystemApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace OcrSystem.Controllers
             _context = context;
         }
 
-        [HttpGet("{invoiceId}")]
+        [HttpGet("{invoiceid}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<InvoiceItem>>> GetInvoiceItems(int invoiceId)
         {
@@ -45,7 +45,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpGet("Detail/{itemId}")]
+        [HttpGet("detail/{itemid}")]
         [Authorize]
         public async Task<ActionResult<InvoiceItem>> GetInvoiceItem(int itemId)
         {
@@ -100,7 +100,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpPut("{itemId}")]
+        [HttpPut("{itemid}")]
         [Authorize]
         public async Task<IActionResult> UpdateInvoiceItem(int itemId, InvoiceItem item)
         {
@@ -142,7 +142,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpDelete("{itemId}")]
+        [HttpDelete("{itemid}")]
         [Authorize]
         public async Task<IActionResult> DeleteInvoiceItem(int itemId)
         {

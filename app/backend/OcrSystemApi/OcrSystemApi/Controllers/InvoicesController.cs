@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.DataAccess;
-using OcrSystem.Models;
+using OcrSystemApi.DataAccess;
+using OcrSystemApi.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace OcrSystem.Controllers
+namespace OcrSystemApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

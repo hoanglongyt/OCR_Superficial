@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OcrSystem.DataAccess;
-using OcrSystem.Models;
+using OcrSystemApi.DataAccess;
+using OcrSystemApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace OcrSystem.Controllers
+namespace OcrSystemApiApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpGet("{invoiceId}")]
+        [HttpGet("{invoiceid}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<InvoiceImage>>> GetInvoiceImages(int invoiceId)
         {
@@ -54,7 +54,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpGet("Detail/{imageId}")]
+        [HttpGet("Detail/{imageid}")]
         [Authorize]
         public async Task<ActionResult<InvoiceImage>> GetInvoiceImage(int imageId)
         {
@@ -83,7 +83,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpPost("Upload/{invoiceId}")]
+        [HttpPost("Upload/{invoiceid}")]
         [Authorize]
         public async Task<ActionResult<InvoiceImage>> UploadImage(int invoiceId, IFormFile file)
         {
@@ -129,7 +129,7 @@ namespace OcrSystem.Controllers
             }
         }
 
-        [HttpDelete("{imageId}")]
+        [HttpDelete("{imageid}")]
         [Authorize]
         public async Task<IActionResult> DeleteInvoiceImage(int imageId)
         {

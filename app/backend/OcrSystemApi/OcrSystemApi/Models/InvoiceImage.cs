@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace OcrSystem.Models
+namespace OcrSystemApi.Models
 {
     public class InvoiceImage
     {

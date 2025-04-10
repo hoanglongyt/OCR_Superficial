@@ -1,0 +1,26 @@
+.password-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 8px 12px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    z-index: 10;
+    width: 100%;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: popupFadeIn 0.3s forwards;
+}
+
+/* Animation */
+@keyframes popupFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

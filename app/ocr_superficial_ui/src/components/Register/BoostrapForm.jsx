@@ -50,11 +50,11 @@ function BoostrapForm(){
 
     // Xử lý đăng ký
     const handleSubmit = async (event) => {
-        // Xử lý kết quả trả về
-
+        
         event.preventDefault()
         const new_user = userState
-        const response = await registerUser("https://localhost:7268/api/Auth/register", new_user) // Gọi đăng ký
+        const api_url = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_REGISTER_EP}`
+        const response = await registerUser(api_url, new_user) // Gọi đăng ký
 
         // Nếu thành công hoặc không
         if(response.ok){

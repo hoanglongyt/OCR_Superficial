@@ -9,21 +9,23 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers(); 
+// Add services to the container
+builder.Services.AddControllers();
 
 // Configure DbContext
-builder.Services.AddDbContext<OcrDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<OcrDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 // Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins("http://localhost:5173") // Nguồn gốc của frontend
-               .AllowAnyMethod() // Cho phép tất cả phương thức (GET, POST, v.v.)
-               .AllowAnyHeader() // Cho phép tất cả header (Content-Type, Authorization, v.v.)
-               .AllowCredentials(); // Cho phép gửi cookie hoặc thông tin xác thực
+        builder.SetIsOriginAllowed(_ => true)
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
     });
 });
 
@@ -42,6 +44,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,7 +71,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -76,11 +79,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
-app.UseCors("AllowFrontend"); // Use CORS policy
-app.UseAuthentication(); // Add middleware Authentication
+
+// *** VERY IMPORTANT - CORS MUST BE BEFORE Authentication ***
+app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers(); // API Routing
-app.UseStaticFiles(); // Serve static files
+
+app.MapControllers();
 
 app.Run();

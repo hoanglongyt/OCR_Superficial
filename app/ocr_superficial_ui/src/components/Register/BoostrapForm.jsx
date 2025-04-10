@@ -10,6 +10,8 @@ import '../../styles/components/Register/BoostrapForm.css';
 
 function BoostrapForm(){
     const navigate = useNavigate()
+    const [onSuccessMessage, setOnSuccessMessage] = useState('')
+    const [onFailedMessage, setOnFailedMessage] = useState('')
     const [isPassValid, setIsPassValid] = useState(false)
     const [userState, setUserState] = useState({
         username: '',
@@ -17,8 +19,6 @@ function BoostrapForm(){
         confirm_password: '',
         email: ''
     })
-    const [isRegSuccess, setIsRegSuccess] = useState(false)
-    const [isRegFailed, setIsRegFailed] = useState(false)
 
     // Thay đổi khi nhập thông tin người dùng đăng ký
     const onChangeUserState = (e) => {
@@ -36,39 +36,43 @@ function BoostrapForm(){
         setIsPassValid(password == confirmationPassword)
     }
 
-    const tryCatchingHandleSubmit = () => {
+    const tryCatchingHandleSubmit = (event) => {
         try{
-            handleSubmit()
+            handleSubmit(event)
         } catch (e) {
             localStorage.setItem('lastError', JSON.stringify(e))
         }
     }
 
-    // Xử lý đăng ký
-    const handleSubmit = async () => {
-        // Xử lý kết quả trả về
-        const handleResult = (response, element_name, callback) => {
-            const responseData = response.body.json()
-            const responseMessage = responseData.message
-            document.querySelector(`.${element_name}`).innerHTML = responseMessage
-            console.log(responseMessage)
-            
-            callback(true)
-        }
+    const handleResult = (message, action) => {
+        action(message)
+    }
 
+    // Xử lý đăng ký
+    const handleSubmit = async (event) => {
+        // Xử lý kết quả trả về
+
+        event.preventDefault()
         const new_user = userState
         const response = await registerUser("https://localhost:7268/api/Auth/register", new_user) // Gọi đăng ký
 
         // Nếu thành công hoặc không
         if(response.ok){
-            handleResult(response, "register-success", setIsRegSuccess)
+            const responseData = await response.json();
+            const message = responseData.message;
+            handleResult(message, setOnSuccessMessage)
+            
             // handle login automatically
+
             setTimeout(() => {
                 navigate('/')
             }, 1000)
 
         } else {
-            handleResult(response, "register-failed", setIsRegFailed)
+            const responseData = await response.json()
+            const message = responseData[0].description
+
+            handleResult(message, setOnFailedMessage)
         }
     }
 
@@ -83,16 +87,20 @@ function BoostrapForm(){
     return (
         <div className="card shadow-sm p-4">
             <h2 className="mb-3 text-center">Register Form</h2>
-            {isRegSuccess && !isRegFailed && (
-                <div className="text-center mt-4">
-                    <h2 className="register-success text-success"></h2>
+            {onSuccessMessage !== '' && (
+                <div className="mt-4 alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success:</strong> {onSuccessMessage}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => handleResult('', setOnSuccessMessage)}></button>
                 </div>
             )}
-            {isRegFailed && (
-                <div className="text-center mt-4">
-                    <h2 className="register-success text-failed"></h2>
+
+            {onFailedMessage !== '' && (
+                <div className="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> {onFailedMessage}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => handleResult('', setOnFailedMessage)}></button>
                 </div>
             )}
+
             <form onSubmit={tryCatchingHandleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">

@@ -36,6 +36,14 @@ function BoostrapForm(){
         setIsPassValid(password == confirmationPassword)
     }
 
+    const tryCatchingHandleSubmit = () => {
+        try{
+            handleSubmit()
+        } catch (e) {
+            localStorage.setItem('lastError', JSON.stringify(e))
+        }
+    }
+
     // Xử lý đăng ký
     const handleSubmit = async () => {
         // Xử lý kết quả trả về
@@ -67,6 +75,8 @@ function BoostrapForm(){
     useEffect(() => {
         console.log(userState)
         console.log("is password matched? " + isPassValid)
+        const lastError = JSON.parse(localStorage.getItem('lastError'))
+        console.log('Last error is: ' + lastError)
         validPassword()
     }, [userState])
 
@@ -83,7 +93,7 @@ function BoostrapForm(){
                     <h2 className="register-success text-failed"></h2>
                 </div>
             )}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={tryCatchingHandleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">
                         Username:

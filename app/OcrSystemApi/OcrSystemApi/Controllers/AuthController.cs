@@ -22,8 +22,14 @@ namespace OcrSystemApi.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IEmailService _emailService;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, ILogger<AuthController> logger)
+        public AuthController(
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            IConfiguration configuration, 
+            ILogger<AuthController> logger,
+            IEmailService mailService)
         {
+            _emailService = mailService;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;

@@ -15,6 +15,18 @@ builder.Services.AddControllers();
 // Configure DbContext
 builder.Services.AddDbContext<OcrDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173") // Nguồn gốc của frontend
+               .AllowAnyMethod() // Cho phép tất cả phương thức (GET, POST, v.v.)
+               .AllowAnyHeader() // Cho phép tất cả header (Content-Type, Authorization, v.v.)
+               .AllowCredentials(); // Cho phép gửi cookie hoặc thông tin xác thực
+    });
+});
+
 // Configure Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 {
@@ -65,6 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowFrontend"); // Use CORS policy
 app.UseAuthentication(); // Add middleware Authentication
 app.UseAuthorization();
 app.MapControllers(); // API Routing

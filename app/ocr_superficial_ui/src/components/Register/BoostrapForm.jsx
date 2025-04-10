@@ -1,3 +1,6 @@
+// import config
+import config from "../../config";
+
 // import js services
 import { registerUser } from "../../services/authService";
 
@@ -46,19 +49,18 @@ function BoostrapForm(){
 
     const handleResult = (message, action) => {
         action(message)
+        console.log(message)
     }
 
     // Xử lý đăng ký
     const handleSubmit = async (event) => {
-        
         event.preventDefault()
         const new_user = userState
-        const api_url = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_REGISTER_EP}`
-        const response = await registerUser(api_url, new_user) // Gọi đăng ký
+        const response = await registerUser(new_user) // Gọi đăng ký
 
         // Nếu thành công hoặc không
         if(response.ok){
-            const responseData = await response.json();
+            const responseData = await response.json()
             const message = responseData.message;
             handleResult(message, setOnSuccessMessage)
             
@@ -77,10 +79,13 @@ function BoostrapForm(){
     }
 
     useEffect(() => {
-        console.log(userState)
-        console.log("is password matched? " + isPassValid)
-        const lastError = JSON.parse(localStorage.getItem('lastError'))
-        console.log('Last error is: ' + lastError)
+        if(!config.isProduction){
+            console.log(userState)
+            console.log("is password matched? " + isPassValid)
+            const lastError = JSON.parse(localStorage.getItem('lastError'))
+            console.log('Last error is: ' + lastError)
+        }
+
         validPassword()
     }, [userState])
 

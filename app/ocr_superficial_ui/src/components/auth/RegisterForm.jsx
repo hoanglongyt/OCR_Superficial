@@ -2,7 +2,7 @@
 import config from "../../config";
 
 // import js services
-import { registerUser } from "../../services/authService";
+import { loginUser, registerUser } from "../../services/authService";
 
 // import react components
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,9 @@ import React, { useEffect, useState } from "react";
 // import styles
 import '../../styles/components/Register/BootstrapForm.css';
 
-function BootstrapForm(){
+import { handleResult } from "../../utils/authComponents/authComponents";
+
+function RegisterForm(){
     const navigate = useNavigate()
     const [onSuccessMessage, setOnSuccessMessage] = useState('')
     const [onFailedMessage, setOnFailedMessage] = useState('')
@@ -29,6 +31,8 @@ function BootstrapForm(){
             ...userState,
             [e.target.name]: e.target.value
         })
+        setOnFailedMessage('')
+        setOnSuccessMessage('')
     }
 
     // Kiểm tra password khi nhập mật khẩu và password và confirm password
@@ -47,11 +51,6 @@ function BootstrapForm(){
         }
     }
 
-    const handleResult = (message, action) => {
-        action(message)
-        console.log(message)
-    }
-
     // Xử lý đăng ký
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -64,7 +63,10 @@ function BootstrapForm(){
             const message = responseData.message;
             handleResult(message, setOnSuccessMessage)
             
-            // handle login automatically
+            loginUser({
+                username: new_user.username,
+                password: new_user.password
+            })
 
             setTimeout(() => {
                 navigate('/')
@@ -90,7 +92,7 @@ function BootstrapForm(){
     }, [userState])
 
     return (
-        <div className="card shadow-sm p-4">
+        <div className="container mt-5">
             <h2 className="mb-3 text-center">Register Form</h2>
             {onSuccessMessage !== '' && (
                 <div className="mt-4 alert alert-success alert-dismissible fade show" role="alert">
@@ -106,7 +108,7 @@ function BootstrapForm(){
                 </div>
             )}
 
-            <form onSubmit={tryCatchingHandleSubmit}>
+            <form onSubmit={tryCatchingHandleSubmit} className="p-4 border rounded shadow-sm">
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">
                         Username:
@@ -118,6 +120,7 @@ function BootstrapForm(){
                         id="username"
                         placeholder="Username"
                         onChange={onChangeUserState}
+                        required
                     />
                 </div>
                 <div className="mb-3">
@@ -131,6 +134,7 @@ function BootstrapForm(){
                         id="password"
                         placeholder="Password"
                         onChange={onChangeUserState}
+                        required
                     />
                 </div>
                 <div className="position-relative mb-3">
@@ -144,6 +148,7 @@ function BootstrapForm(){
                         id="confirm-password"
                         placeholder="Confirm your password"
                         onChange={onChangeUserState}
+                        required
                     />
 
                     {!isPassValid && (
@@ -166,6 +171,7 @@ function BootstrapForm(){
                         id="email"
                         placeholder="Email"
                         onChange={onChangeUserState}
+                        required
                     />
                 </div>
                 <button type="submit" className="btn btn-primary w-100">
@@ -176,4 +182,4 @@ function BootstrapForm(){
     )
 }
 
-export default BootstrapForm
+export default RegisterForm

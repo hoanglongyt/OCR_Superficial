@@ -25,7 +25,7 @@ function NavbarItems(){
               </Link>
             </li>
             {/* Add more navigation links as needed */}
-          </ul>
+        </ul>
     )
 }
 

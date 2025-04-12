@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Register from './Register/Register'
+import Auth from './auth/Auth'
 import Header from '../layouts/Header'
 
 function App(){
@@ -10,7 +10,7 @@ function App(){
             <Header />
             <Routes>
                 <Route path='/' element={this} />
-                <Route path='/register' element={<Register />} />
+                <Route path='/auth/*' element={<Auth />} />
             </Routes>
         </Router>
     )

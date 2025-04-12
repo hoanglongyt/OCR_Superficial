@@ -134,13 +134,13 @@ function BootstrapForm(){
                     />
                 </div>
                 <div className="position-relative mb-3">
-                    <label htmlFor="confirm-password" className="form-label">
+                    <label htmlFor="confirm_password" className="form-label">
                         Confirm Password:
                     </label>
                     <input 
                         type="password"
                         className="form-control"
-                        name="confirm-password"
+                        name="confirm_password"
                         id="confirm-password"
                         placeholder="Confirm your password"
                         onChange={onChangeUserState}

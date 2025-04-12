@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 // import styles
-import '../../styles/components/Register/BoostrapForm.css';
+import '../../styles/components/Register/BootstrapForm.css';
 
-function BoostrapForm(){
+function BootstrapForm(){
     const navigate = useNavigate()
     const [onSuccessMessage, setOnSuccessMessage] = useState('')
     const [onFailedMessage, setOnFailedMessage] = useState('')
@@ -68,7 +68,7 @@ function BoostrapForm(){
 
             setTimeout(() => {
                 navigate('/')
-            }, 1000)
+            }, 2000)
 
         } else {
             const responseData = await response.json()
@@ -176,4 +176,4 @@ function BoostrapForm(){
     )
 }
 
-export default BoostrapForm
+export default BootstrapForm

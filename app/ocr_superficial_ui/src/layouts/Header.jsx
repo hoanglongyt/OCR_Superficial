@@ -1,6 +1,6 @@
 import React from 'react';
-import Logo from '../components/Logo';
-import NavbarLinks from '../components/Header/NavbarLinks';
+import Logo from '../components/logo/Logo';
+import Navbar from '../components/header/Navbar';
 
 const Header = () => {
   return (
@@ -18,7 +18,7 @@ const Header = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <NavbarLinks />
+        <Navbar />
       </div>
     </nav>
   );

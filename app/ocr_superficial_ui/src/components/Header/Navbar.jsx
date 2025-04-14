@@ -2,7 +2,7 @@
 import config from "../../config";
 
 // import reacts states and objects
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 
 // import components
 import NavbarItems from "./NavbarItems";
@@ -14,19 +14,11 @@ import { isValidJWT } from "../../utils/jwtUtils/jwtValidate";
 
 // import external libraries functions and objects
 import { jwtDecode } from 'jwt-decode';
+import { UserContext } from "../../contexts/userContext";
 
 function Navbar() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const user_token = localStorage.getItem("token");
-    console.log("From nav bar: " + user_token)
-    if (isValidJWT(user_token)) {
-      const decodedUser = jwtDecode(user_token);
-      setUser(decodedUser);
-    }
-  }, []); // Runs once when Navbar mounts
-
+  const { user } = useContext(UserContext);
+  
   return (
     <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
       <NavbarItems />

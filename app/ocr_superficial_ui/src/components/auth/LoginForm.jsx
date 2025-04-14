@@ -11,7 +11,7 @@ import { loginUser } from "../../services/authService";
 // import helper functions (utils)
 import { handleResult } from "../../utils/authComponents/authComponents";
 
-function LoginForm() {
+function LoginForm({setUser}) {
     const navigate = useNavigate()
     const [loginStatusMsg, setLoginStatusMsg] = useState('')
     const [formData, setFormData] = useState({
@@ -29,11 +29,14 @@ function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Logging in with:", formData);
         const response = await loginUser(formData)
         
         if(response.isSuccess){
             setTimeout(() => {
+                setUser({
+                    ...formData,
+                    token: localStorage.getItem("token")
+                })
                 navigate('/')
             }, 1000)
         } else {
@@ -44,8 +47,6 @@ function LoginForm() {
     useEffect(() => {
         if(!config.isProduction){
             console.log(loginStatusMsg)
-            const token = localStorage.getItem("token")
-            console.log(token)
         }
     }, [loginStatusMsg])
 

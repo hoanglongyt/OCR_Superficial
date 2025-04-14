@@ -13,7 +13,7 @@ import '../../styles/components/Register/BootstrapForm.css';
 
 import { handleResult } from "../../utils/authComponents/authComponents";
 
-function RegisterForm(){
+function RegisterForm({setUser}){
     const navigate = useNavigate()
     const [onSuccessMessage, setOnSuccessMessage] = useState('')
     const [onFailedMessage, setOnFailedMessage] = useState('')
@@ -66,6 +66,12 @@ function RegisterForm(){
             loginUser({
                 username: new_user.username,
                 password: new_user.password
+            })
+
+            setUser({
+                username: userState.username,
+                password: userState.password,
+                token: localStorage.getItem("token")
             })
 
             setTimeout(() => {

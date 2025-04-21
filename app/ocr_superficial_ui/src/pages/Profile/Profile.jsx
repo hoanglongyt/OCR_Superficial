@@ -3,7 +3,7 @@ import PDFManager from "./PDFManager"; // đổi đường dẫn theo dự án c
 function Profile() {
   return (
     <div>
-      <h1>Trang cá nhân</h1>
+      <h1>Quản lý PDF</h1>
       <PDFManager />
     </div>
   );

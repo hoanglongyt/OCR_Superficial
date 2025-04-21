@@ -19,7 +19,7 @@ export async function registerUser(new_user) {
 }
 
 export async function loginUser(user_info, fake_login = false) {
-    if(fake_login){
+    if(fake_login && !config.isProduction){
         const response_obj = {
             isSuccess: true,
             statusMsg: "Successsfully logged in"

@@ -25,11 +25,11 @@ namespace OcrSystemApi.Services
             var bodyBuilder = new BodyBuilder { HtmlBody = body };
             email.Body = bodyBuilder.ToMessageBody();
 
-            using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), MailKit.Security.SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync(emailSettings["Username"], emailSettings["Password"]);
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+            //using var smtp = new SmtpClient();
+            //await smtp.ConnectAsync(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), MailKit.Security.SecureSocketOptions.StartTls);
+            //await smtp.AuthenticateAsync(emailSettings["Username"], emailSettings["Password"]);
+            //await smtp.SendAsync(email);
+            //await smtp.DisconnectAsync(true);
         }
     }
 }

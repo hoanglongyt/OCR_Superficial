@@ -15,6 +15,6 @@ namespace OcrSystemApi.Models
         [Required, StringLength(255)]
         public string ImageURL { get; set; }
 
-        public DateTime UploadedAt { get; set; } = DateTime.Now;
+        public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,4 +1,4 @@
-import PDFManager from "./PDFManager"; // đổi đường dẫn theo dự án của bạn
+import PDFManager from "../../components/profile/PDFManager"; // đổi đường dẫn theo dự án của bạn
 
 function Profile() {
   return (

@@ -1,46 +1,59 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import "./Home.css";
+import config from "../../config";
+import { useNavigate } from "react-router-dom";
+import { ImageContext } from "../../contexts/ImageContext";
 
 function Home() {
+  const navigate = useNavigate()
+  const {setImage} = useContext(ImageContext)
   const [selectedFile, setSelectedFile] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && file.type === "application/pdf") {
+
+    if(!config.isProduction){
+      console.log("File type: ", file.type);
+    }
+
+    if (file && file.type.startsWith("image/")) {
       setSelectedFile(file);
     } else {
-      alert("Please select a valid PDF file");
+      alert("Please select a valid Image file");
     }
   };
 
   const handleConversion = async () => {
     if (!selectedFile) {
-      alert("Please select a PDF file first");
+      alert("Please select a Image file first");
       return;
     }
 
     setIsConverting(true);
     // TODO: Implement your PDF conversion logic here
-    setIsConverting(false);
+    setTimeout(() => {
+      setImage(selectedFile)
+      navigate("/process")
+    }, 1500);
   };
 
   return (
     <div className="home-container">
-      <h1>PDF to Text Converter</h1>
+      <h1>Image to PDF Converter</h1>
       <div className="converter-box">
         <div className="upload-section">
           <input
             type="file"
-            accept=".pdf"
+            accept=".png,.jpg,.jpeg"
             onChange={handleFileChange}
             id="file-input"
             hidden
           />
           <label htmlFor="file-input" className="upload-label">
             <FiUpload size={40} />
-            <p>Drop your PDF here or click to browse</p>
+            <p>Drop your PNG here or click to browse</p>
           </label>
         </div>
         

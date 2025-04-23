@@ -1,16 +1,19 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Register from './Register/Register'
+import Auth from './auth/Auth'
 import Header from '../layouts/Header'
+import Home from '../pages/Home/Home'
+import Profile from '../pages/Profile/Profile'
 
 function App(){
     return (
         <Router>
             <Header />
             <Routes>
-                <Route path='/' element={this} />
-                <Route path='/register' element={<Register />} />
+                <Route path='/' element={<Home />} />
+                <Route path='/profile/*' element={<Profile />} />
+                <Route path='/auth/*' element={<Auth />} />
             </Routes>
         </Router>
     )

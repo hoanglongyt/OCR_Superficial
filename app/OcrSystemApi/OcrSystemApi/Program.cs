@@ -9,11 +9,25 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers(); 
+// Add services to the container
+builder.Services.AddControllers();
 
 // Configure DbContext
-builder.Services.AddDbContext<OcrDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<OcrDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.SetIsOriginAllowed(_ => true)
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
+});
 
 // Configure Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
@@ -30,6 +44,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -56,7 +71,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -64,10 +79,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
-app.UseAuthentication(); // Add middleware Authentication
+
+// *** VERY IMPORTANT - CORS MUST BE BEFORE Authentication ***
+app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers(); // API Routing
-app.UseStaticFiles(); // Serve static files
+
+app.MapControllers();
 
 app.Run();

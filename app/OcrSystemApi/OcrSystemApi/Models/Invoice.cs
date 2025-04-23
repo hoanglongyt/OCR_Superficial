@@ -20,7 +20,7 @@ namespace OcrSystemApi.Models
         public decimal TotalAmount { get; set; }
 
         [StringLength(50)]
-        public string Status { get; set; } = "Pending";
+        public string Status { get; set; }
 
         public ICollection<InvoiceImage> InvoiceImages { get; set; }
         public ICollection<OCRResult> OCRResults { get; set; }

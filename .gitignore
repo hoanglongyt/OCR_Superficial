@@ -24,10 +24,6 @@ Generated_Code/
 publish/
 secrets.json
 
-# Environment files
-.env
-.env.*
-
 # Rider IDE
 .idea/
 *.sln.iml

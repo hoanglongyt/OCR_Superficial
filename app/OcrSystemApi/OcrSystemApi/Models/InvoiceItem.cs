@@ -18,7 +18,6 @@ namespace OcrSystemApi.Models
         public int Quantity { get; set; } = 1;
 
         public decimal UnitPrice { get; set; }
-
         public decimal TotalPrice { get; set; }
     }
 }

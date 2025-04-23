@@ -17,6 +17,6 @@ namespace OcrSystemApi.Models
 
         public float? Confidence { get; set; }
 
-        public DateTime ProcessedAt { get; set; } = DateTime.Now;
+        public DateTime ProcessedAt { get; set; } = DateTime.UtcNow;
     }
 }

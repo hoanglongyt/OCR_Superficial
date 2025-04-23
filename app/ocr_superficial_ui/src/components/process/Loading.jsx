@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { toImage } from "../../services/coreService";
+import { extractText, greyOut, toImage } from "../../services/coreService";
 import { ImageContext } from "../../contexts/ImageContext";
 import config from "../../config";
+import { useNavigate } from "react-router-dom";
 
 export default function Loading() {
-  const { image } = useContext(ImageContext);
+  const nagivate = useNavigate()
+  const { image, setImage } = useContext(ImageContext);
   const [currentImagePath, setCurrentImagePath] = useState(null);
   const [urlToRevoke, setUrlToRevoke] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -21,7 +23,7 @@ export default function Loading() {
         setCurrentImagePath(url);
         setUrlToRevoke(url);
         setImageLoaded(false);
-        await new Promise((resolve) => setTimeout(resolve, 2500));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       },
     },
     {
@@ -31,23 +33,37 @@ export default function Loading() {
         if(!config.isProduction){
             console.log(image)
         }
-        const imgPath = await toImage(image);
+        const imgPath = await toImage(image, setImage);
         setCurrentImagePath(imgPath);
         setUrlToRevoke(imgPath);
         setImageLoaded(false);
         console.log(imgPath);
+        await new Promise((resolve) => setTimeout(() => resolve(), 1000))
       },
     },
     {
       stepId: 2,
       stepDescription: "Extracting texts",
       handler: async () => {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            console.log("Extracting texts");
-            resolve();
-          }, 1500);
-        });
+        const greyOuImg = await greyOut(image, setImage)
+        setCurrentImagePath(greyOuImg);
+        setUrlToRevoke(greyOuImg);
+        setImageLoaded(false);
+        
+        const text = await extractText(image)
+
+        await new Promise(
+          (resolve) => {
+            setTimeout(() => {
+              nagivate("/process/result", {
+                state: {
+                  text
+                }
+              })
+              setImage(null)
+              resolve()
+            }, 1000)
+          })
       },
     },
   ];

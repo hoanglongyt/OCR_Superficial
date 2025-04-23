@@ -57,3 +57,21 @@ p {
         background-position: 200% 0;
     }
 }
+
+/* BillingBox.jsx styles */
+.billingbox-container {
+    border: 2px dashed #ccc;
+    padding: 1rem;
+    background-color: #fdfdfd;
+    font-family: monospace;
+    white-space: pre-wrap;
+    border-radius: 8px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 1rem auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.billingbox-line {
+    padding: 2px 0;
+}

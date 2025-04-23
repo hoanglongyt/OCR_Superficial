@@ -8,10 +8,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react(), mkcert()],
   server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost.pem')),
-    },
+    https: true,
     port: 5173,
     host: 'localhost',
   },

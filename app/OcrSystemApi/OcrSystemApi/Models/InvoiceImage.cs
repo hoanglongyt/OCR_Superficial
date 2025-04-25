@@ -7,14 +7,12 @@ namespace OcrSystemApi.Models
     {
         [Key]
         public int ImageID { get; set; }
-
-        [ForeignKey("Invoice")]
-        public int InvoiceID { get; set; }
-        public Invoice Invoice { get; set; }
-
+        [ForeignKey("User")]
+        public int UserID { get; set; }
+        public User Users { get; set; }
         [Required, StringLength(255)]
         public string ImageURL { get; set; }
-
-        public DateTime UploadedAt { get; set; } = DateTime.Now;
+        public DateTime UploadedAt { get; set; } // Keep only one declaration
+        public ICollection<OCRResult> OCRResults { get; set; }
     }
 }

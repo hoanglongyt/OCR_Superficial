@@ -27,23 +27,21 @@ namespace OcrSystemApiApi.Controllers
             }
         }
 
-        [HttpGet("{invoiceid}")]
+        [HttpGet("{userid}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<InvoiceImage>>> GetInvoiceImages(int invoiceId)
+        public async Task<ActionResult<IEnumerable<InvoiceImage>>> GetInvoiceImages(int userId)
         {
             try
             {
-                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var invoice = await _context.Invoices
-                    .FirstOrDefaultAsync(i => i.InvoiceID == invoiceId && i.UserID == userId);
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-                if (invoice == null)
+                if (currentUserId != userId)
                 {
-                    return NotFound("Invoice not found or you do not have access to this invoice.");
+                    return Forbid("You do not have access to these images.");
                 }
 
                 var invoiceImages = await _context.InvoiceImages
-                    .Where(i => i.InvoiceID == invoiceId)
+                    .Where(i => i.UserID == userId)
                     .ToListAsync();
 
                 return Ok(invoiceImages);
@@ -62,7 +60,7 @@ namespace OcrSystemApiApi.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var invoiceImage = await _context.InvoiceImages
-                    .Include(i => i.Invoice)
+                    .Include(i => i.Users)
                     .FirstOrDefaultAsync(i => i.ImageID == imageId);
 
                 if (invoiceImage == null)
@@ -70,7 +68,7 @@ namespace OcrSystemApiApi.Controllers
                     return NotFound("Image not found.");
                 }
 
-                if (invoiceImage.Invoice.UserID != userId)
+                if (invoiceImage.UserID != userId)
                 {
                     return Forbid("You do not have access to this image.");
                 }
@@ -83,20 +81,16 @@ namespace OcrSystemApiApi.Controllers
             }
         }
 
-        [HttpPost("Upload/{invoiceid}")]
+        [HttpPost("Upload/{imageid}")]
         [Authorize]
-        public async Task<ActionResult<InvoiceImage>> UploadImage(int invoiceId, IFormFile file)
+        public async Task<ActionResult<InvoiceImage>> UploadImage(int imageId, IFormFile file)
         {
             try
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var invoice = await _context.Invoices
-                    .FirstOrDefaultAsync(i => i.InvoiceID == invoiceId && i.UserID == userId);
+                var invoiceImage = await _context.InvoiceImages
+                    .FirstOrDefaultAsync(i => i.UserID == userId);
 
-                if (invoice == null)
-                {
-                    return NotFound("Invoice not found or you do not have access to this invoice.");
-                }
 
                 if (file == null || file.Length == 0)
                 {
@@ -111,9 +105,9 @@ namespace OcrSystemApiApi.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                var invoiceImage = new InvoiceImage
+                invoiceImage = new InvoiceImage // Corrected variable usage
                 {
-                    InvoiceID = invoiceId,
+                    UserID = userId,
                     ImageURL = $"/images/{fileName}",
                     UploadedAt = DateTime.UtcNow
                 };
@@ -137,7 +131,6 @@ namespace OcrSystemApiApi.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var invoiceImage = await _context.InvoiceImages
-                    .Include(i => i.Invoice)
                     .FirstOrDefaultAsync(i => i.ImageID == imageId);
 
                 if (invoiceImage == null)
@@ -145,7 +138,7 @@ namespace OcrSystemApiApi.Controllers
                     return NotFound("Image not found.");
                 }
 
-                if (invoiceImage.Invoice.UserID != userId)
+                if (invoiceImage.UserID != userId)
                 {
                     return Forbid("You do not have access to this image.");
                 }

@@ -8,9 +8,9 @@ namespace OcrSystemApi.Models
         [Key]
         public int OCRID { get; set; }
 
-        [ForeignKey("Invoice")]
-        public int InvoiceID { get; set; }
-        public Invoice Invoice { get; set; }
+        [ForeignKey("InvoiceImage")]
+        public int ImageID { get; set; }
+        public InvoiceImage InvoiceImages { get; set; }
 
         [Required]
         public string OCRText { get; set; }

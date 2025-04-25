@@ -28,7 +28,7 @@ const apiCalling = async (image, callback = null, endpoint = "/") => {
         })
         .catch((err) => {
             console.log("Uploaded failed: ", err)
-            return null;
+            throw err
         })
 }
 
@@ -57,6 +57,6 @@ export async function extractText(image, callback = null) {
         })
         .catch((err) => {
             console.log("Uploaded failed: ", err)
-            return null;
+            throw err;
         })
 }

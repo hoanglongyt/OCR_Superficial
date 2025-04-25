@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // import components
-import Loading from "../../components/process/Loading";
-import Viewing from "../../components/process/Viewing";
+import Loading from "./components/Loading";
+import Viewing from "./components/Viewing";
 
 // import css
 import "./Process.css";

@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
-import config from "../../config"
+import config from "../../../config"
 import BillingBox from "./BillingBox"
 
 export default function Viewing(){

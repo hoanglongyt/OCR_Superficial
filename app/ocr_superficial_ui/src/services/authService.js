@@ -18,7 +18,18 @@ export async function registerUser(new_user) {
     return response
 }
 
-export async function loginUser(user_info) {
+export async function loginUser(user_info, fake_login = false) {
+    if(fake_login && !config.isProduction){
+        console.log('Using fake login');
+        const response_obj = {
+            isSuccess: true,
+            statusMsg: "Successsfully logged in"
+        }
+
+        localStorage.setItem("token", "abcdefhgujttkad");
+        return response_obj;
+    }
+
     const response_obj = {
         isSuccess: false,
         statusMsg: ''

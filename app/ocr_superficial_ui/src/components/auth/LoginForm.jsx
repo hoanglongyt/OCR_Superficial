@@ -29,7 +29,8 @@ function LoginForm({setUser}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await loginUser(formData)
+        const response = await loginUser(formData, false)
+        console.log(response)
         
         if(response.isSuccess){
             setTimeout(() => {

@@ -12,8 +12,8 @@ using OcrSystemApi.DataAccess;
 namespace OcrSystemApi.Migrations
 {
     [DbContext(typeof(OcrDbContext))]
-    [Migration("20250425075031_initial")]
-    partial class initial
+    [Migration("20250427050141_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

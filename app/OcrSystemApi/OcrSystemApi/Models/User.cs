@@ -7,9 +7,7 @@ namespace OcrSystemApi.Models
     {
         [Required, StringLength(100)]
         public string Email { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public ICollection<Invoice> Invoices { get; set; }
+        public DateTime CreatedAt { get; set; } // Keep only one declaration
+        public ICollection<InvoiceImage> InvoiceImages { get; set; }
     }
 }

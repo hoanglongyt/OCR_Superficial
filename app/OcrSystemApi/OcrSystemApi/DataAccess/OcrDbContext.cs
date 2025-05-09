@@ -10,10 +10,8 @@ namespace OcrSystemApi.DataAccess
         public OcrDbContext(DbContextOptions<OcrDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceImage> InvoiceImages { get; set; }
         public DbSet<OCRResult> OCRResults { get; set; }
-        public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,25 +39,16 @@ namespace OcrSystemApi.DataAccess
             modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
 
             // Cấu hình các mối quan hệ
-            modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.User)
-                .WithMany(u => u.Invoices)
-                .HasForeignKey(i => i.UserID);
-
-            modelBuilder.Entity<InvoiceItem>()
-                .HasOne(ii => ii.Invoice)
-                .WithMany(i => i.InvoiceItems)
-                .HasForeignKey(ii => ii.InvoiceID);
 
             modelBuilder.Entity<InvoiceImage>()
-                .HasOne(ii => ii.Invoice)
+                .HasOne(ii => ii.Users)
                 .WithMany(i => i.InvoiceImages)
-                .HasForeignKey(ii => ii.InvoiceID);
+                .HasForeignKey(ii => ii.UserID);
 
             modelBuilder.Entity<OCRResult>()
-                .HasOne(or => or.Invoice)
+                .HasOne(or => or.InvoiceImages)
                 .WithMany(i => i.OCRResults)
-                .HasForeignKey(or => or.InvoiceID);
+                .HasForeignKey(or => or.ImageID);
         }
     }
 }

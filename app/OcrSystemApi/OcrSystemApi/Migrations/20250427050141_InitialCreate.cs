@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LyHoangLong.Migrations
+namespace OcrSystemApi.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -33,12 +33,12 @@ namespace LyHoangLong.Migrations
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -75,22 +75,20 @@ namespace LyHoangLong.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invoices",
+                name: "InvoiceImages",
                 columns: table => new
                 {
-                    InvoiceID = table.Column<int>(type: "int", nullable: false)
+                    ImageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(type: "int", nullable: false),
-                    InvoiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Vendor = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    ImageURL = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoices", x => x.InvoiceID);
+                    table.PrimaryKey("PK_InvoiceImages", x => x.ImageID);
                     table.ForeignKey(
-                        name: "FK_Invoices_Users_UserID",
+                        name: "FK_InvoiceImages_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
@@ -183,56 +181,12 @@ namespace LyHoangLong.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvoiceImages",
-                columns: table => new
-                {
-                    ImageID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InvoiceID = table.Column<int>(type: "int", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InvoiceImages", x => x.ImageID);
-                    table.ForeignKey(
-                        name: "FK_InvoiceImages_Invoices_InvoiceID",
-                        column: x => x.InvoiceID,
-                        principalTable: "Invoices",
-                        principalColumn: "InvoiceID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InvoiceItems",
-                columns: table => new
-                {
-                    ItemID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InvoiceID = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InvoiceItems", x => x.ItemID);
-                    table.ForeignKey(
-                        name: "FK_InvoiceItems_Invoices_InvoiceID",
-                        column: x => x.InvoiceID,
-                        principalTable: "Invoices",
-                        principalColumn: "InvoiceID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OCRResults",
                 columns: table => new
                 {
                     OCRID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InvoiceID = table.Column<int>(type: "int", nullable: false),
+                    ImageID = table.Column<int>(type: "int", nullable: false),
                     OCRText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Confidence = table.Column<float>(type: "real", nullable: true),
                     ProcessedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -241,32 +195,22 @@ namespace LyHoangLong.Migrations
                 {
                     table.PrimaryKey("PK_OCRResults", x => x.OCRID);
                     table.ForeignKey(
-                        name: "FK_OCRResults_Invoices_InvoiceID",
-                        column: x => x.InvoiceID,
-                        principalTable: "Invoices",
-                        principalColumn: "InvoiceID",
+                        name: "FK_OCRResults_InvoiceImages_ImageID",
+                        column: x => x.ImageID,
+                        principalTable: "InvoiceImages",
+                        principalColumn: "ImageID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_InvoiceImages_InvoiceID",
+                name: "IX_InvoiceImages_UserID",
                 table: "InvoiceImages",
-                column: "InvoiceID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InvoiceItems_InvoiceID",
-                table: "InvoiceItems",
-                column: "InvoiceID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_UserID",
-                table: "Invoices",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OCRResults_InvoiceID",
+                name: "IX_OCRResults_ImageID",
                 table: "OCRResults",
-                column: "InvoiceID");
+                column: "ImageID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -325,12 +269,6 @@ namespace LyHoangLong.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "InvoiceImages");
-
-            migrationBuilder.DropTable(
-                name: "InvoiceItems");
-
-            migrationBuilder.DropTable(
                 name: "OCRResults");
 
             migrationBuilder.DropTable(
@@ -349,7 +287,7 @@ namespace LyHoangLong.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Invoices");
+                name: "InvoiceImages");
 
             migrationBuilder.DropTable(
                 name: "Roles");

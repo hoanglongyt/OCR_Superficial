@@ -20,15 +20,15 @@ namespace OcrSystemApi.Controllers
             _context = context;
         }
 
-        [HttpGet("{invoiceid}")]
+        [HttpGet("{imageid}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<OCRResult>>> GetOCRResults(int invoiceId)
+        public async Task<ActionResult<IEnumerable<OCRResult>>> GetOCRResults(int imageId) // Fixed parameter name
         {
             try
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var invoice = await _context.Invoices
-                    .FirstOrDefaultAsync(i => i.InvoiceID == invoiceId && i.UserID == userId);
+                var invoice = await _context.InvoiceImages
+                    .FirstOrDefaultAsync(i => i.ImageID == imageId && i.UserID == userId);
 
                 if (invoice == null)
                 {
@@ -36,7 +36,7 @@ namespace OcrSystemApi.Controllers
                 }
 
                 return await _context.OCRResults
-                    .Where(o => o.InvoiceID == invoiceId)
+                    .Where(o => o.ImageID == imageId && o.InvoiceImages.UserID == userId) // Adjusted to use the correct navigation property
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace OcrSystemApi.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var ocrResult = await _context.OCRResults
-                    .Include(o => o.Invoice)
+                    .Include(o => o.InvoiceImages)
                     .FirstOrDefaultAsync(o => o.OCRID == ocrId);
 
                 if (ocrResult == null)
@@ -61,7 +61,7 @@ namespace OcrSystemApi.Controllers
                     return NotFound("OCR result not found.");
                 }
 
-                if (ocrResult.Invoice.UserID != userId)
+                if (ocrResult.InvoiceImages.UserID != userId) // Corrected to check user access
                 {
                     return Forbid("You do not have access to this OCR result.");
                 }
@@ -81,8 +81,8 @@ namespace OcrSystemApi.Controllers
             try
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var invoice = await _context.Invoices
-                    .FirstOrDefaultAsync(i => i.InvoiceID == ocrResult.InvoiceID && i.UserID == userId);
+                var invoice = await _context.InvoiceImages
+                    .FirstOrDefaultAsync(i => i.ImageID == ocrResult.ImageID && i.UserID == userId);
 
                 if (invoice == null)
                 {
@@ -114,7 +114,7 @@ namespace OcrSystemApi.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var existingResult = await _context.OCRResults
-                    .Include(o => o.Invoice)
+                    .Include(o => o.InvoiceImages)
                     .FirstOrDefaultAsync(o => o.OCRID == ocrId);
 
                 if (existingResult == null)
@@ -122,7 +122,7 @@ namespace OcrSystemApi.Controllers
                     return NotFound("OCR result not found.");
                 }
 
-                if (existingResult.Invoice.UserID != userId)
+                if (existingResult.InvoiceImages.UserID != userId)
                 {
                     return Forbid("You do not have access to this OCR result.");
                 }
@@ -150,7 +150,7 @@ namespace OcrSystemApi.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var ocrResult = await _context.OCRResults
-                    .Include(o => o.Invoice)
+                    .Include(o => o.InvoiceImages)
                     .FirstOrDefaultAsync(o => o.OCRID == ocrId);
 
                 if (ocrResult == null)
@@ -158,7 +158,7 @@ namespace OcrSystemApi.Controllers
                     return NotFound("OCR result not found.");
                 }
 
-                if (ocrResult.Invoice.UserID != userId)
+                if (ocrResult.InvoiceImages.UserID != userId)
                 {
                     return Forbid("You do not have access to this OCR result.");
                 }

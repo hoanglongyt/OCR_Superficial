@@ -44,7 +44,7 @@ function UploadSection({ onFileSelect }) {
       console.log("Selected file type: ", file.type);
     }
 
-    if (file.type.startsWith("image/")) {
+    if (file.type.startsWith("image/") ) {
       onFileSelect(file);
     } else {
       alert("Please select a valid Image file");
@@ -60,7 +60,7 @@ function UploadSection({ onFileSelect }) {
     >
       <input
         type="file"
-        accept=".png,.jpg,.jpeg"
+        accept=".png,.jpg,.jpeg,.pdf"
         id="file-input"
         hidden
         onChange={handleChange}

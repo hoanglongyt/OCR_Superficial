@@ -3,7 +3,7 @@ import React from "react";
 function Title() {
   return (
     <header className="home-header">
-      <h1>Image to PDF Converter</h1>
+      <h1>Image to Text Converter</h1>
       <p>Upload your PNG, JPG images and convert them easily!</p>
     </header>
   );

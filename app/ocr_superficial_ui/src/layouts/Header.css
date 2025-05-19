@@ -1,0 +1,45 @@
+/* Hiệu ứng dropdown menu hiển thị nhiều cột */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  width: 800px;
+  max-width: 200%;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  animation: fadeIn 0.2s ease-in-out;
+  z-index: 1050;
+}
+
+/* Multi-column item */
+.multi-column-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.95rem;
+  transition: background 0.2s ease;
+}
+
+.multi-column-menu .dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.multi-column-menu .dropdown-header {
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.5rem;
+  color: #6c757d;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

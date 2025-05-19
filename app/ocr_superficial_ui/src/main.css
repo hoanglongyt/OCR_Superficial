@@ -38,7 +38,7 @@ a:hover {
 
 body {
   margin: 0;
-  margin-top: 50px;
+  /* Đã xóa margin-top vì header đã thay đổi từ fixed-top thành sticky-top */
   display: flex;
   place-items: center;
   min-width: 320px;

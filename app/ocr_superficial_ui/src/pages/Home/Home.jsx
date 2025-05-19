@@ -13,6 +13,17 @@ function Home() {
   const { setImage } = useContext(ImageContext);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleOptionClick = (option) => {
+    alert(`You selected: ${option}`);
+    setShowDropdown(false);
+  };
+
 
   const handleFileChange = (file) => {
     setSelectedFile(file);

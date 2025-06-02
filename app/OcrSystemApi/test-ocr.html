@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .result {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffe8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        select, input[type="file"] {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 OCR API Tester</h1>
+    
+    <div class="container">
+        <h2>Test OCR Endpoints</h2>
+        
+        <div>
+            <label>Select Image:</label>
+            <input type="file" id="imageFile" accept="image/*">
+        </div>
+        
+        <div>
+            <label>Language:</label>
+            <select id="language">
+                <option value="vie">Vietnamese (vie)</option>
+                <option value="eng">English (eng)</option>
+                <option value="vie+eng">Vietnamese + English</option>
+            </select>
+        </div>
+        
+        <div>
+            <label>Strategy:</label>
+            <select id="strategy">
+                <option value="advanced">Advanced (Recommended)</option>
+                <option value="document">Document</option>
+                <option value="handwritten">Handwritten</option>
+                <option value="simple">Simple</option>
+            </select>
+        </div>
+        
+        <div>
+            <button onclick="testDiagnostic()">🔍 Run Diagnostic</button>
+            <button onclick="testEnhancedOCR()">🚀 Enhanced OCR</button>
+            <button onclick="testOldOCR()">📄 Old OCR (Compare)</button>
+        </div>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:5174/api/Image';
+        
+        function getFormData() {
+            const fileInput = document.getElementById('imageFile');
+            const language = document.getElementById('language').value;
+            const strategy = document.getElementById('strategy').value;
+            
+            if (!fileInput.files[0]) {
+                alert('Please select an image file');
+                return null;
+            }
+            
+            const formData = new FormData();
+            formData.append('imageFile', fileInput.files[0]);
+            
+            return { formData, language, strategy };
+        }
+        
+        function displayResult(title, data, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = isError ? 'error' : 'result';
+            resultDiv.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        async function testDiagnostic() {
+            const data = getFormData();
+            if (!data) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/diagnose-ocr?language=${data.language}`, {
+                    method: 'POST',
+                    body: data.formData
+                });
+                
+                const result = await response.json();
+                displayResult('🔍 Diagnostic Results', result);
+            } catch (error) {
+                displayResult('❌ Diagnostic Error', { error: error.message }, true);
+            }
+        }
+        
+        async function testEnhancedOCR() {
+            const data = getFormData();
+            if (!data) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/extract-text-enhanced?language=${data.language}&strategy=${data.strategy}`, {
+                    method: 'POST',
+                    body: data.formData
+                });
+                
+                const result = await response.json();
+                displayResult('🚀 Enhanced OCR Results', result);
+            } catch (error) {
+                displayResult('❌ Enhanced OCR Error', { error: error.message }, true);
+            }
+        }
+        
+        async function testOldOCR() {
+            const data = getFormData();
+            if (!data) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/extract-text-from-image?language=${data.language}`, {
+                    method: 'POST',
+                    body: data.formData
+                });
+                
+                const result = await response.json();
+                displayResult('📄 Old OCR Results (for comparison)', result);
+            } catch (error) {
+                displayResult('❌ Old OCR Error', { error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>
